@@ -1,0 +1,9 @@
+{
+  "name": "habitflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HabitFlow - Habit Tracking Application",
+  "dependencies": {
+    "vercel-php": "^0.7.3"
+  }
+}
