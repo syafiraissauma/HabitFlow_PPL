@@ -14,24 +14,24 @@ define('APP_VERSION', '1.0.0');
 
 // Base URL detection
 if (!defined('BASE_URL')) {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? "https://" : "http://";
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    
-    // Calculate base directory path relative to htdocs
-    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-    // If inside a subfolder (like /habits, /auth), find root /HabitFlowPPL
-    $parts = explode('/', trim($scriptDir, '/'));
-    $projectFolder = '';
-    if (!empty($parts[0])) {
-        $projectFolder = '/' . $parts[0];
+    if (getenv('BASE_URL')) {
+        define('BASE_URL', rtrim(getenv('BASE_URL'), '/'));
+    } else {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? "https://" : "http://";
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        
+        // Calculate base directory path relative to htdocs
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+        $parts = array_values(array_filter(explode('/', trim($scriptDir, '/'))));
+        
+        // Only append project folder if running in a subdirectory like /HabitFlowPPL on localhost
+        $projectFolder = '';
+        if (!empty($parts) && strcasecmp($parts[0], 'HabitFlowPPL') === 0) {
+            $projectFolder = '/' . $parts[0];
+        }
+        
+        define('BASE_URL', rtrim($protocol . $host . $projectFolder, '/'));
     }
-    
-    // Default fallback to /HabitFlowPPL
-    if (empty($projectFolder) || $projectFolder === '/') {
-        $projectFolder = '/HabitFlowPPL';
-    }
-    
-    define('BASE_URL', rtrim($protocol . $host . $projectFolder, '/'));
 }
 
 // Start Session if not already started
