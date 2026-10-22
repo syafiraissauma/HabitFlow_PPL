@@ -1,26 +1,9 @@
 {
   "version": 2,
   "functions": {
-    "api/**/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "auth/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "habits/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "history/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "profile/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "reports/*.php": {
-      "runtime": "vercel-php@latest"
-    },
-    "*.php": {
-      "runtime": "vercel-php@latest"
+    "api/*.php": {
+      "runtime": "vercel-php@latest",
+      "includeFiles": "**"
     }
   },
   "routes": [
@@ -29,12 +12,8 @@
       "dest": "/assets/$1"
     },
     {
-      "src": "/",
-      "dest": "/index.php"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/api/index.php"
     }
   ]
 }
