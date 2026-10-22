@@ -17,8 +17,15 @@ if (!defined('BASE_URL')) {
     if (getenv('BASE_URL')) {
         define('BASE_URL', rtrim(getenv('BASE_URL'), '/'));
     } else {
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? "https://" : "http://";
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $isHttps = (
+            (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+            (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
+            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+            (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') ||
+            (str_ends_with(strtolower($host), '.vercel.app'))
+        );
+        $protocol = $isHttps ? "https://" : "http://";
         
         // Calculate base directory path relative to htdocs
         $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));

@@ -2,12 +2,29 @@
   "version": 2,
   "builds": [
     {
+      "src": "assets/**",
+      "use": "@vercel/static"
+    },
+    {
       "src": "index.php",
       "use": "vercel-php@0.7.3"
     },
     {
       "src": "api/index.php",
-      "use": "vercel-php@0.7.3"
+      "use": "vercel-php@0.7.3",
+      "config": {
+        "includeFiles": [
+          "assets/**",
+          "config/**",
+          "includes/**",
+          "auth/**",
+          "habits/**",
+          "history/**",
+          "profile/**",
+          "reports/**",
+          "*.php"
+        ]
+      }
     }
   ],
   "routes": [
